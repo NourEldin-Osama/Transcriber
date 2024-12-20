@@ -1,0 +1,22 @@
+version = 1
+requires-python = ">=3.13"
+
+[[package]]
+name = "transcriber"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "yt-dlp" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "yt-dlp", specifier = ">=2024.12.13" }]
+
+[[package]]
+name = "yt-dlp"
+version = "2024.12.13"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/fd/a05fac6661cc43057a6f804eeeba3f8f893f3f3bb22e071e0c4aa798ccdb/yt_dlp-2024.12.13.tar.gz", hash = "sha256:77e15afb9d460ecb7294a39bb5e39dc9f4e8a65f3a37ef4db58800b94d095511", size = 2913186 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/42/5b/e39cb315ce5be55cfd1ebef707dc2d8e4f02c6c6f8b61752076c67c8427f/yt_dlp-2024.12.13-py3-none-any.whl", hash = "sha256:5a16b7511e8500cbb13ff0babc9c6deb1e049dc1c854a51738aad2529167fcdf", size = 3175556 },
+]
