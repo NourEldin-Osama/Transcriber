@@ -51,7 +51,7 @@ class Output(BaseModel):
     """
 
     output_formats: list[str] = Field(default=["all"])
-    output_dir: str = "Output"
+    output_dir: str = "Transcripts"
     save_files_before_compact: bool = False
     min_words_per_segment: int = 1
     save_yt_dlp_responses: bool = True
