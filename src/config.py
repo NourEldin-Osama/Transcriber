@@ -89,7 +89,7 @@ class Whisper(BaseModel):
     If the model name ends with ".en", the language will be automatically set to "en".
     """
 
-    model_name_or_path: str = "openai/whisper-large-v3"
+    model_name_or_path: str = "large-v3"
     task: str = "transcribe"
     language: str
     use_faster_whisper: bool = True
