@@ -87,7 +87,7 @@ def main():
     model = whisper_utils.load_model()
 
     for idx, item in enumerate(
-        tqdm(settings.urls_or_paths, desc="URLs or local paths")
+        tqdm(settings.input.urls_or_paths, desc="URLs or local paths")
     ):
         progress_info = {
             "outer_total": len(settings.input.urls_or_paths),
