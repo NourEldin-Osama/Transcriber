@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
 
-from ..types.export_type import ExportType
-from ..types.segment_type import SegmentType
-from ..utils import time_utils
-from ..config import settings
+from src.config import settings
+from src.types.export_type import ExportType
+from src.types.segment_type import SegmentType
+from src.utils import time_utils
 
 
 class Writer:
@@ -65,7 +65,7 @@ class Writer:
 
     def generate_srt(self, segments: list[SegmentType]) -> str:
         return "".join(
-            f'{i}\n'
+            f"{i}\n"
             f"{time_utils.format_timestamp(segment['start'], include_hours=True, decimal_marker=',')} --> "
             f"{time_utils.format_timestamp(segment['end'], include_hours=True, decimal_marker=',')}\n"
             f"{segment['text'].strip()}\n\n"

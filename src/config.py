@@ -1,9 +1,10 @@
-from .types.export_type import ExportType
-
 from functools import lru_cache
 from pathlib import Path
-from pydantic import model_validator, Field, BaseModel
+
+from pydantic import BaseModel, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from src.types.export_type import ExportType
 
 # Get the project root directory
 PROJECT_ROOT = Path(__file__).parent.parent.resolve()
@@ -25,6 +26,7 @@ class Input(BaseModel):
     verbose : bool, optional
         Enable verbose output, by default False.
     """
+
     urls_or_paths: list[str]
     skip_if_output_exist: bool = True
     download_retries: int = 3
@@ -115,6 +117,7 @@ class Settings(BaseSettings):
     whisper : Whisper
         Whisper model configuration settings.
     """
+
     model_config = SettingsConfigDict(
         env_file=str(PROJECT_ROOT / ".env"),
         env_ignore_empty=True,

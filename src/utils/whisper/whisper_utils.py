@@ -1,8 +1,8 @@
 import faster_whisper
 import stable_whisper
 
-from ...config import settings
-from ...types.whisper.type_hints import WhisperModel
+from src.config import settings
+from src.types.whisper.type_hints import WhisperModel
 
 
 def load_model() -> WhisperModel:  # type: ignore
