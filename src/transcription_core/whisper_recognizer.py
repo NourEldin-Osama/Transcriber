@@ -27,10 +27,13 @@ class WhisperRecognizer:
                 return self._recognize_stable_whisper(
                     file_path, model, settings.whisper
                 )
-            elif isinstance(model, faster_whisper.WhisperModel):
+            elif isinstance(model, faster_whisper.WhisperModel) or isinstance(
+                model, faster_whisper.BatchedInferencePipeline
+            ):
                 return self._recognize_faster_whisper(
                     file_path, model, settings.whisper
                 )
+
             else:
                 raise ValueError("Unsupported model type")
 
