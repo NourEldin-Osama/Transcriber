@@ -74,7 +74,7 @@ class Whisper(BaseModel):
     ----------
     model_name_or_path : str, optional
         Path to the model or name of the model to load.
-        Default is "openai/whisper-large-v3".
+        Default is "large-v3".
     task : str, optional
         Task to perform (transcribe or translate), by default "transcribe".
     language : str
@@ -99,6 +99,9 @@ class Whisper(BaseModel):
     ct2_compute_type: str = "float16"
     use_batched_transcription: bool = True
     batch_size: int = 16
+    vad_filter: bool = True
+    vad_parameters: dict = dict(min_silence_duration_ms=500)
+
 
     @model_validator(mode="after")
     def set_language(self) -> "Whisper":
