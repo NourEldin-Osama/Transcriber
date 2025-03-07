@@ -24,15 +24,11 @@ class WhisperRecognizer:
             warnings.simplefilter("ignore")
 
             if isinstance(model, whisper.Whisper):
-                return self._recognize_stable_whisper(
-                    file_path, model, settings.whisper
-                )
+                return self._recognize_stable_whisper(file_path, model)
             elif isinstance(model, faster_whisper.WhisperModel) or isinstance(
                 model, faster_whisper.BatchedInferencePipeline
             ):
-                return self._recognize_faster_whisper(
-                    file_path, model, settings.whisper
-                )
+                return self._recognize_faster_whisper(file_path, model)
 
             else:
                 raise ValueError("Unsupported model type")
