@@ -1,13 +1,11 @@
 from pathlib import Path
 from typing import Any
 
-
-from src.utils.progress import MultipleProgress
-
 from src.config import settings
 from src.export_handlers.exporter import Writer
 from src.transcription_core.whisper_recognizer import WhisperRecognizer
 from src.utils import file_utils
+from src.utils.progress import MultipleProgress
 from src.utils.whisper import whisper_utils
 
 
@@ -70,6 +68,7 @@ def process_local_directory(path, model):
 
 
 def transcribe():
+    """Main transcription function that processes all input sources."""
     prepare_output_directory()
     model = whisper_utils.load_model()
 
@@ -86,17 +85,3 @@ def transcribe():
             # Handle unsupported input
             print(f"Unsupported input: {item}")
             continue
-
-
-def main():
-    """Main function to run the transcription process."""
-    input_files = settings.input.urls_or_paths
-    if input_files:
-        print("Starting transcription...")
-        transcribe()
-    else:
-        print("No input files or URLs provided.")
-
-
-if __name__ == "__main__":
-    main()
