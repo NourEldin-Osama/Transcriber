@@ -97,6 +97,8 @@ class Whisper(BaseModel):
     use_faster_whisper: bool = True
     beam_size: int = 5
     ct2_compute_type: str = "float16"
+    use_batched_transcription: bool = True
+    batch_size: int = 16
 
     @model_validator(mode="after")
     def set_language(self) -> "Whisper":

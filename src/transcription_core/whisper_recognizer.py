@@ -61,12 +61,21 @@ class WhisperRecognizer:
         audio_file_path: str,
         model: faster_whisper.WhisperModel,
     ) -> list[SegmentType]:
-        segments, info = model.transcribe(
-            audio=audio_file_path,
-            task=settings.whisper.task,
-            language=settings.whisper.language,
-            beam_size=settings.whisper.beam_size,
-        )
+        if settings.whisper.use_batched_transcription:
+            segments, info = model.transcribe(
+                audio=audio_file_path,
+                task=settings.whisper.task,
+                language=settings.whisper.language,
+                beam_size=settings.whisper.beam_size,
+                batch_size=settings.whisper.batch_size,
+            )
+        else:
+            segments, info = model.transcribe(
+                audio=audio_file_path,
+                task=settings.whisper.task,
+                language=settings.whisper.language,
+                beam_size=settings.whisper.beam_size,
+            )
 
         converted_segments = []
         last_end = 0
