@@ -7,7 +7,6 @@ from src.utils.progress import MultipleProgress
 from src.config import settings
 from src.export_handlers.exporter import Writer
 from src.transcription_core.whisper_recognizer import WhisperRecognizer
-from src.types.segment_type import SegmentType
 from src.utils import file_utils
 from src.utils.whisper import whisper_utils
 
@@ -42,7 +41,7 @@ def process_local_directory(path, model):
             writer = Writer()
             file_name = Path(file["file_name"]).stem
             if settings.input.skip_if_output_exist and writer.is_output_exist(
-                file_name, settings.output
+                file_name
             ):
                 progress.advance(total_task)
                 continue
