@@ -3,6 +3,9 @@ name = "Transcriber"
 version = "0.1.0"
 description = "A simple tool to transcribe audio files"
 readme = "README.md"
+authors = [
+    { name = "NourEldin", email = "noureldin.osama.saad@gmail.com" }
+]
 requires-python = ">=3.11"
 dependencies = [
     "faster-whisper>=1.1.1",
@@ -12,3 +15,10 @@ dependencies = [
     "stable-ts>=2.18.3",
     "yt-dlp==2025.1.15",
 ]
+
+[project.scripts]
+transcriber = "src.transcriber:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
