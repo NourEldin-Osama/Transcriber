@@ -4,7 +4,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from src.types.export_type import ExportType
+from Transcriber.types.export_type import ExportType
 
 # Get the project root directory
 PROJECT_ROOT = Path(__file__).parent.parent.resolve()

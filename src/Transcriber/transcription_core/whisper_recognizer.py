@@ -5,9 +5,9 @@ from typing import Any
 import faster_whisper
 import whisper
 
-from src.config import settings
-from src.types.segment_type import SegmentType
-from src.types.whisper.type_hints import WhisperModel
+from Transcriber.config import settings
+from Transcriber.types.segment_type import SegmentType
+from Transcriber.types.whisper.type_hints import WhisperModel
 
 
 class WhisperRecognizer:

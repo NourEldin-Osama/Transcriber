@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-transcriber = "src.transcriber:main"
+transcribe = "Transcriber.transcriber:transcribe"
 
 [build-system]
 requires = ["hatchling"]

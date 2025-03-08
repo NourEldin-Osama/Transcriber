@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
 
-from src.config import settings
-from src.types.export_type import ExportType
-from src.types.segment_type import SegmentType
-from src.utils import time_utils
+from Transcriber.config import settings
+from Transcriber.types.export_type import ExportType
+from Transcriber.types.segment_type import SegmentType
+from Transcriber.utils import time_utils
 
 
 class Writer:

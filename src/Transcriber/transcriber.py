@@ -1,12 +1,12 @@
 from pathlib import Path
 from typing import Any
 
-from src.config import settings
-from src.export_handlers.exporter import Writer
-from src.transcription_core.whisper_recognizer import WhisperRecognizer
-from src.utils import file_utils
-from src.utils.progress import MultipleProgress
-from src.utils.whisper import whisper_utils
+from Transcriber.config import settings
+from Transcriber.export_handlers.exporter import Writer
+from Transcriber.transcription_core.whisper_recognizer import WhisperRecognizer
+from Transcriber.utils import file_utils
+from Transcriber.utils.progress import MultipleProgress
+from Transcriber.utils.whisper import whisper_utils
 
 
 def prepare_output_directory():
@@ -69,6 +69,11 @@ def process_local_directory(path, model):
 
 def transcribe():
     """Main transcription function that processes all input sources."""
+    input_files = settings.input.urls_or_paths
+    if not input_files:
+        print("No input files provided. Exiting transcription.")
+        return
+    print("Starting transcription...")
     prepare_output_directory()
     model = whisper_utils.load_model()
 
