@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from Transcriber.types.export_type import ExportType
 
 # Get the project root directory
-PROJECT_ROOT = Path(__file__).parent.parent.resolve()
+PROJECT_ROOT = Path.cwd()
 
 
 class Input(BaseModel):
