@@ -82,9 +82,10 @@ class WhisperRecognizer:
 
         file_name = Path(audio_file_path).name
 
+        file_duration = round(info.duration, 2)
         file_task = self.progress.add_task(
             f"[bold blue]Transcribing {file_name}",
-            total=round(info.duration, 2),
+            total=file_duration,
             progress_type="transcribe",
         )
 
@@ -100,7 +101,7 @@ class WhisperRecognizer:
             # Update the progress bar
             progress_update = min(
                 segment.end - last_end,
-                info.duration - self.progress.tasks[file_task].completed,
+                file_duration - self.progress.tasks[file_task].completed,
             )
             if progress_update > 0:
                 self.progress.update(file_task, advance=progress_update)
@@ -108,8 +109,9 @@ class WhisperRecognizer:
 
         self.progress.update(
             file_task,
-            completed=info.duration,
+            completed=file_duration,
             description=f"[bold green]Transcribing {file_name} Complete 🎉",
+            refresh=True,
         )
 
         return converted_segments
