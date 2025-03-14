@@ -3,6 +3,7 @@ from pathlib import Path
 
 from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.oxml import OxmlElement
 from docx.shared import Pt
 
 from Transcriber.config import settings
@@ -68,23 +69,42 @@ class Writer:
         doc = Document()
         file_name = os.path.basename(file_path)
         title = os.path.splitext(file_name)[0]
-        doc.add_heading(title, level=1)
+        header = doc.add_heading(title, level=1)
+
+        if self.is_rtl():
+            # Set the header direction to RTL
+            self.set_element_rtl(header)
+
+        # Set the header alignment to center
+        header.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+        # Set the font size and name for the header
+        header_font = header.runs[0].font
+        header_font.size = Pt(settings.output.title_font_size)
+        header_font.name = settings.output.title_font_name
 
         for segment in segments:
-            paragraph = doc.add_paragraph(segment["text"].strip())
+            paragraph_text = segment["text"].strip()
 
-            if settings.whisper.language == "ar":
-                paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                paragraph.paragraph_format.right_to_left = True
-                paragraph.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
-                paragraph.rtl = True
+            if self.is_rtl():
+                # Replace characters for RTL
+                paragraph_text = self.prepare_text_for_rtl(paragraph_text)
+
+            paragraph = doc.add_paragraph(paragraph_text)
+
+            if self.is_rtl():
+                # Set the paragraph direction to RTL using XML
+                self.set_element_rtl(paragraph)
+                # In RTL mode, LEFT alignment is actually right-aligned
+                # Set the alignment to LEFT, which will be interpreted as right-aligned in RTL mode
+                paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
             else:
                 paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
 
             # change font size
             for run in paragraph.runs:
-                run.font.size = Pt(settings.output.font_size)
-                run.font.name = settings.output.font_name
+                font = run.font
+                font.size = Pt(settings.output.body_font_size)
+                font.name = settings.output.body_font_name
 
         doc.save(file_path)
 
@@ -166,3 +186,43 @@ class Writer:
     def _write_to_file(self, file_path: str, content: str) -> None:
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(content)
+
+    def is_rtl(self) -> bool:
+        """Checks if the current output setting is right-to-left."""
+        if settings.whisper.language == "ar":
+            return True
+        return False
+
+    def set_element_rtl(self, element):
+        """Sets the element to right-to-left using XML."""
+        # Get element properties container that holds formatting attributes
+        element_properties = element._element.get_or_add_pPr()
+        # Create a new XML element for right-to-left direction
+        rtl_element = OxmlElement("w:bidi")
+        # Append the element to the element properties container
+        element_properties.append(rtl_element)
+
+    def prepare_text_for_rtl(self, text: str) -> str:
+        """
+        Replaces characters in the text from LTR to RTL.
+        This is a placeholder function and should be implemented based on specific requirements.
+        """
+        # Define the replacements for LTR to RTL conversion
+        # Convert common punctuation marks
+        replacements = {
+            "(": "）",
+            ")": "（",
+            "[": "］",
+            "]": "［",
+            "{": "｝",
+            "}": "｛",
+            "<": "＞",
+            ">": "＜",
+            ",": "،",
+            ".": ".",
+            "?": "؟",
+            "!": "！",
+        }
+        for ltr, rtl in replacements.items():
+            text = text.replace(ltr, rtl)
+        return text

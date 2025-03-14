@@ -57,8 +57,10 @@ class Output(BaseModel):
     save_files_before_compact: bool = False
     min_words_per_segment: int = 1
     save_yt_dlp_responses: bool = True
-    font_name: str = "Arial"
-    font_size: int = 20
+    title_font_name: str = "Times New Roman"
+    body_font_name: str = "Arial"
+    title_font_size: int = 30
+    body_font_size: int = 20
 
     @model_validator(mode="after")
     def process_formats(self) -> "Output":
