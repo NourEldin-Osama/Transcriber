@@ -13,6 +13,10 @@ def prepare_output_directory():
     """Prepare the output directory by creating it if it does not exist."""
     output_dir = Path(settings.output.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    # # Create format-specific output directory
+    for output_format in settings.output.output_formats:
+        format_output_dir = output_dir / output_format
+        format_output_dir.mkdir(exist_ok=True)
 
 
 def process_local_directory(path, model):

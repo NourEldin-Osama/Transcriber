@@ -102,7 +102,6 @@ class Whisper(BaseModel):
     vad_filter: bool = True
     vad_parameters: dict = dict(min_silence_duration_ms=500)
 
-
     @model_validator(mode="after")
     def set_language(self) -> "Whisper":
         if self.model_name_or_path.endswith(".en"):

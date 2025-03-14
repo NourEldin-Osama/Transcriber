@@ -16,11 +16,12 @@ class Writer:
             else segments
         )
         for output_format in settings.output.output_formats:
+            format_output_dir = os.path.join(settings.output.output_dir, output_format)
             # Save original if needed
             if settings.output.save_files_before_compact and should_compact:
                 self.write(
                     ExportType(output_format),
-                    settings.output.output_dir,
+                    format_output_dir,
                     f"{file_name}-original.{output_format}",
                     segments,
                 )
@@ -28,7 +29,7 @@ class Writer:
             # Save compacted or regular version
             self.write(
                 ExportType(output_format),
-                settings.output.output_dir,
+                format_output_dir,
                 f"{file_name}.{output_format}",
                 segments_to_write,
             )
@@ -109,7 +110,9 @@ class Writer:
     def is_output_exist(self, file_name: str):
         if settings.output.save_files_before_compact and not all(
             Path(
-                settings.output.output_dir, f"{file_name}-original.{output_format}"
+                settings.output.output_dir,
+                output_format,
+                f"{file_name}-original.{output_format}",
             ).is_file()
             for output_format in settings.output.output_formats
         ):
@@ -119,7 +122,11 @@ class Writer:
             not settings.output.save_files_before_compact
             or settings.output.min_words_per_segment != 0
         ) and not all(
-            Path(settings.output.output_dir, f"{file_name}.{output_format}").is_file()
+            Path(
+                settings.output.output_dir,
+                output_format,
+                f"{file_name}.{output_format}",
+            ).is_file()
             for output_format in settings.output.output_formats
         ):
             return False
