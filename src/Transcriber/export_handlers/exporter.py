@@ -1,6 +1,10 @@
 import os
 from pathlib import Path
 
+from docx import Document
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.shared import Pt
+
 from Transcriber.config import settings
 from Transcriber.types.export_type import ExportType
 from Transcriber.types.segment_type import SegmentType
@@ -48,6 +52,8 @@ class Writer:
             self.write_srt(file_path, segments)
         elif format == ExportType.VTT:
             self.write_vtt(file_path, segments)
+        elif format == ExportType.DOCX:
+            self.write_docx(file_path, segments)
 
     def write_txt(self, file_path: str, segments: list[SegmentType]) -> None:
         self._write_to_file(file_path, self.generate_txt(segments))
@@ -57,6 +63,30 @@ class Writer:
 
     def write_vtt(self, file_path: str, segments: list[SegmentType]) -> None:
         self._write_to_file(file_path, self.generate_vtt(segments))
+
+    def write_docx(self, file_path: str, segments: list[SegmentType]) -> None:
+        doc = Document()
+        file_name = os.path.basename(file_path)
+        title = os.path.splitext(file_name)[0]
+        doc.add_heading(title, level=1)
+
+        for segment in segments:
+            paragraph = doc.add_paragraph(segment["text"].strip())
+
+            if settings.whisper.language == "ar":
+                paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                paragraph.paragraph_format.right_to_left = True
+                paragraph.paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                paragraph.rtl = True
+            else:
+                paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+            # change font size
+            for run in paragraph.runs:
+                run.font.size = Pt(settings.output.font_size)
+                run.font.name = settings.output.font_name
+
+        doc.save(file_path)
 
     def generate_txt(self, segments: list[SegmentType]) -> str:
         return (
