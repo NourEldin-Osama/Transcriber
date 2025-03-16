@@ -4,37 +4,77 @@ A flexible Python package for transcribing audio and video from various sources 
 
 ## Features
 
-- **Multiple Input Sources**: Transcribe from SoundCloud, YouTube, or local audio/video files.
-- **Multiple Models**: Easily switch between different speech recognition models.
-- **GPU Acceleration**: Utilize GPU processing for faster transcription.
-- **Concurrent Processing**: Implement async and multiprocessing for improved performance.
-- **Various Output Formats**: Export transcriptions to txt, docx, or srt formats.
+- **Multiple Input Sources**: Transcribe from SoundCloud, YouTube, or local audio/video files
+- **Multiple Models**: Support for both `faster-whisper` and standard `whisper` models
+- **GPU Acceleration**: Utilize GPU processing for faster transcription
+- **Concurrent Processing**: Batch processing and VAD filtering for improved performance
+- **Various Output Formats**: Export transcriptions to multiple formats
+- **Progress Tracking**: Rich progress bars showing transcription status
+- **Configurable**: Extensive configuration options via environment variables or settings
+
+## Requirements
+
+- Python 3.11 or higher
+- GPU support (optional but recommended for better performance)
 
 ## Installation
 
-Install the required packages:
+1. Install the package:
 
-```bash
-uv pip install -r requirements.txt
-```
+    ```bash
+    uv pip install Transcriber
+    ```
+
+## Configuration
+
+1. Copy the example environment file:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+2. Configure the settings in `.env`:
+
+    ```env
+    # Input settings
+    INPUT__URLS_OR_PATHS=["Audio_To_Transcribe"]
+    INPUT__SKIP_IF_OUTPUT_EXIST=false
+
+    # Output settings
+    OUTPUT__OUTPUT_FORMATS=["all"]
+    OUTPUT__OUTPUT_DIR="Transcripts"
+
+    # Whisper model settings
+    WHISPER__LANGUAGE="ar"
+    ```
 
 ## Usage
 
-Provide examples on how to use the package:
+### Basic Usage
 
 ```python
-# Example command to transcribe a YouTube video
-import transcriber
+from Transcriber.transcriber import transcribe
 
-transcriber.transcrib(
-    source="youtube",
-    url="https://www.youtube.com/watch?v=6Jv8GKZlX2A",
-    model="whisper-large-v3",
-    output_format= ["txt", "docx", "srt"],
-    output_dir="output"
-)
+# Configure input files in .env, then:
+transcribe()
 ```
 
-## Contributing
+### Command Line Usage
 
-Contributions are welcome. Please submit a pull request or open an issue for suggestions.
+```bash
+uv run --with Transcriber transcribe
+```
+
+### Example Configuration
+
+```python
+# Example settings in your .env file
+INPUT__URLS_OR_PATHS=["path/to/audio.mp3", "https://youtube.com/watch?v=example"]
+OUTPUT__OUTPUT_FORMATS=["txt", "srt"]
+WHISPER__LANGUAGE="en"
+```
+
+## Acknowledgments
+
+- [OpenAI Whisper](https://github.com/openai/whisper)
+- [Faster Whisper](https://github.com/guillaumekln/faster-whisper)
