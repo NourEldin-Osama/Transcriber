@@ -116,6 +116,7 @@ class Whisper(BaseModel):
 class Logging(BaseModel):
     """Configuration class for logging settings."""
 
+    logfire_token: str | None = None
     log_to_file: bool = True
     log_to_console: bool = True
     log_level: str = "INFO"
