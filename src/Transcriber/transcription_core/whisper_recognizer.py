@@ -6,6 +6,7 @@ import faster_whisper
 import whisper
 
 from Transcriber.config import settings
+from Transcriber.logging import logfire, logger
 from Transcriber.types.segment_type import SegmentType
 from Transcriber.types.whisper.type_hints import WhisperModel
 
@@ -24,13 +25,19 @@ class WhisperRecognizer:
             warnings.simplefilter("ignore")
 
             if isinstance(model, whisper.Whisper):
+                logger.debug("Using stable-whisper model")
                 return self._recognize_stable_whisper(file_path, model)
             elif isinstance(model, faster_whisper.WhisperModel) or isinstance(
                 model, faster_whisper.BatchedInferencePipeline
             ):
+                logger.debug("Using faster-whisper model")
                 return self._recognize_faster_whisper(file_path, model)
 
             else:
+                logger.error(
+                    "Unsupported model type:",
+                    model_type=type(model),
+                )
                 raise ValueError("Unsupported model type")
 
     def _recognize_stable_whisper(
@@ -72,9 +79,16 @@ class WhisperRecognizer:
         if settings.whisper.use_batched_transcription:
             kwargs["batch_size"] = settings.whisper.batch_size
 
+        logger.debug("Configuring faster-whisper", **kwargs, model_type=type(model))
+
         segments, info = model.transcribe(
             audio=audio_file_path,
             **kwargs,
+        )
+        logger.debug(
+            "Transcribing file {file_name}",
+            file_name=audio_file_path,
+            info=info,
         )
 
         converted_segments = []
@@ -83,6 +97,13 @@ class WhisperRecognizer:
         file_name = Path(audio_file_path).name
 
         file_duration = round(info.duration, 2)
+
+        logger.info(
+            "Transcribing file {file_name}",
+            file_name=file_name,
+            file_duration=file_duration,
+        )
+
         file_task = self.progress.add_task(
             f"[bold blue]Transcribing {file_name}",
             total=file_duration,
