@@ -113,6 +113,18 @@ class Whisper(BaseModel):
         return self
 
 
+class Logging(BaseModel):
+    """Configuration class for logging settings."""
+
+    log_to_file: bool = True
+    log_to_console: bool = True
+    log_level: str = "INFO"
+    log_path: str = "logs"
+    rotation: str = "1 week"
+    backtrace: bool = True
+    diagnose: bool = True
+
+
 class Settings(BaseSettings):
     """Main settings class that combines all configuration components.
 
@@ -124,6 +136,8 @@ class Settings(BaseSettings):
         Output configuration settings.
     whisper : Whisper
         Whisper model configuration settings.
+    logging : Logging
+        Logging configuration settings.
     """
 
     model_config = SettingsConfigDict(
@@ -136,6 +150,7 @@ class Settings(BaseSettings):
     input: Input
     output: Output
     whisper: Whisper
+    logging: Logging
 
 
 @lru_cache()

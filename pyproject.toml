@@ -17,6 +17,9 @@ dependencies = [
     "yt-dlp==2025.1.15",
 ]
 
+[project.optional-dependencies]
+log = ["logfire>=3.8.1", "loguru>=0.7.3"]
+
 [project.scripts]
 transcribe = "Transcriber.transcriber:transcribe"
 
