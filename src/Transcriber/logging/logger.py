@@ -5,9 +5,9 @@ try:
     import logfire
     from loguru import logger
 
-    if settings.logging.LOGFIRE_TOKEN:
+    if settings.logging.logfire_token:
         # Initialize logfire with the token
-        logfire.configure(token=settings.logging.LOGFIRE_TOKEN)
+        logfire.configure(token=settings.logging.logfire_token)
     else:
         logfire.configure()
     logfire.instrument_pydantic()
