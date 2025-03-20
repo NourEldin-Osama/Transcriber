@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -116,14 +117,15 @@ class Whisper(BaseModel):
 class Logging(BaseModel):
     """Configuration class for logging settings."""
 
-    logfire_token: str | None = None
-    log_to_file: bool = True
     log_to_console: bool = True
-    log_level: str = "INFO"
+    log_to_file: bool = True
+    log_level: Literal["TRACE", "DEBUG", "INFO", "SUCCESS", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     log_path: str = "logs"
     rotation: str = "1 week"
     backtrace: bool = True
     diagnose: bool = True
+    enable_logfire: bool = False
+    logfire_token: str | None = None
 
 
 class Settings(BaseSettings):

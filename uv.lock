@@ -1369,10 +1369,11 @@ wheels = [
 
 [[package]]
 name = "transcriber"
-version = "0.1.8"
+version = "0.1.9"
 source = { editable = "." }
 dependencies = [
     { name = "faster-whisper" },
+    { name = "loguru" },
     { name = "openai-whisper" },
     { name = "pydantic-settings" },
     { name = "python-docx" },
@@ -1382,9 +1383,8 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-log = [
+logfire = [
     { name = "logfire" },
-    { name = "loguru" },
 ]
 
 [package.dev-dependencies]
@@ -1399,8 +1399,8 @@ lint = [
 [package.metadata]
 requires-dist = [
     { name = "faster-whisper", specifier = ">=1.1.1" },
-    { name = "logfire", marker = "extra == 'log'", specifier = ">=3.8.1" },
-    { name = "loguru", marker = "extra == 'log'", specifier = ">=0.7.3" },
+    { name = "logfire", marker = "extra == 'logfire'", specifier = ">=3.8.1" },
+    { name = "loguru", specifier = ">=0.7.3" },
     { name = "openai-whisper", specifier = ">=20240930" },
     { name = "pydantic-settings", specifier = ">=2.7.1" },
     { name = "python-docx", specifier = ">=1.1.2" },
@@ -1408,7 +1408,7 @@ requires-dist = [
     { name = "stable-ts", specifier = ">=2.18.3" },
     { name = "yt-dlp", specifier = "==2025.1.15" },
 ]
-provides-extras = ["log"]
+provides-extras = ["logfire"]
 
 [package.metadata.requires-dev]
 dev = [
