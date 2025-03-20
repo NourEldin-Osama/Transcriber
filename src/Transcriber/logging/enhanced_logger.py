@@ -39,3 +39,7 @@ class EnhancedLogger(logging.Logger):
 
     def trace(self, msg: str, *args: Any, **kwargs: Any) -> None:
         self.debug(msg, *args, **kwargs)
+
+    def exception(self, msg: str, *args: Any, **kwargs: Any) -> None:
+        msg = self._format_message(msg, kwargs)
+        super().exception(f"🚨  {msg}", *args)

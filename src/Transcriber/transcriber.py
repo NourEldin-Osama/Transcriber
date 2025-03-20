@@ -23,12 +23,8 @@ def prepare_output_directory():
 
 
 def process_local_directory(path, model):
-    filtered_media_files = file_utils.filter_media_files(
-        [path] if path.is_file() else list(path.iterdir())
-    )
-    files: list[dict[str, Any]] = [
-        {"file_name": file.name, "file_path": file} for file in filtered_media_files
-    ]
+    filtered_media_files = file_utils.filter_media_files([path] if path.is_file() else list(path.iterdir()))
+    files: list[dict[str, Any]] = [{"file_name": file.name, "file_path": file} for file in filtered_media_files]
 
     total_files = len(files)
     # Check if there are any files to process
@@ -57,9 +53,7 @@ def process_local_directory(path, model):
             try:
                 writer = Writer()
                 file_name = Path(file["file_name"]).stem
-                if settings.input.skip_if_output_exist and writer.is_output_exist(
-                    file_name
-                ):
+                if settings.input.skip_if_output_exist and writer.is_output_exist(file_name):
                     logger.info(
                         f"Skipping existing file: {file_name}",
                     )
@@ -70,10 +64,8 @@ def process_local_directory(path, model):
 
                 logger.info(f"Transcribing file: {file_name}")
 
-                with logfire.span("Transcribing {file_name}", file_name):
-                    recognizer = WhisperRecognizer(
-                        verbose=settings.input.verbose, progress=progress
-                    )
+                with logfire.span(f"Transcribing {file_name}"):
+                    recognizer = WhisperRecognizer(verbose=settings.input.verbose, progress=progress)
                     segments = recognizer.recognize(
                         file_path,
                         model,
@@ -84,8 +76,8 @@ def process_local_directory(path, model):
                 else:
                     logger.success(f"Successfully transcribed file: {file_name}")
                     writer.write_all(file_name, segments)
-            except Exception as e:
-                logger.error(f"Error processing file {file_name}")
+            except Exception:
+                logger.exception(f"Error processing file {file_name}")
             finally:
                 progress.advance(total_task)
 

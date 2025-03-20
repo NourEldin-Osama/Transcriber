@@ -16,9 +16,7 @@ class Writer:
     def write_all(self, file_name: str, segments: list[SegmentType]) -> None:
         should_compact = settings.output.min_words_per_segment > 0
         segments_to_write = (
-            self.compact_segments(segments, settings.output.min_words_per_segment)
-            if should_compact
-            else segments
+            self.compact_segments(segments, settings.output.min_words_per_segment) if should_compact else segments
         )
         for output_format in settings.output.output_formats:
             format_output_dir = os.path.join(settings.output.output_dir, output_format)
@@ -41,19 +39,19 @@ class Writer:
 
     def write(
         self,
-        format: ExportType,
+        export_format: ExportType,
         output_dir: str,
         file_path: str,
         segments: list[SegmentType],
     ) -> None:
         file_path = os.path.join(output_dir, file_path)
-        if format == ExportType.TXT:
+        if export_format == ExportType.TXT:
             self.write_txt(file_path, segments)
-        elif format == ExportType.SRT:
+        elif export_format == ExportType.SRT:
             self.write_srt(file_path, segments)
-        elif format == ExportType.VTT:
+        elif export_format == ExportType.VTT:
             self.write_vtt(file_path, segments)
-        elif format == ExportType.DOCX:
+        elif export_format == ExportType.DOCX:
             self.write_docx(file_path, segments)
 
     def write_txt(self, file_path: str, segments: list[SegmentType]) -> None:
@@ -109,10 +107,7 @@ class Writer:
         doc.save(file_path)
 
     def generate_txt(self, segments: list[SegmentType]) -> str:
-        return (
-            "\n".join(list(map(lambda segment: segment["text"].strip(), segments)))
-            + "\n"
-        )
+        return "\n".join(list(map(lambda segment: segment["text"].strip(), segments))) + "\n"
 
     def generate_srt(self, segments: list[SegmentType]) -> str:
         return "".join(
@@ -130,9 +125,7 @@ class Writer:
             for segment in segments
         )
 
-    def compact_segments(
-        self, segments: list[SegmentType], min_words_per_segment: int
-    ) -> list[SegmentType]:
+    def compact_segments(self, segments: list[SegmentType], min_words_per_segment: int) -> list[SegmentType]:
         if min_words_per_segment == 0:
             return segments
 
@@ -168,10 +161,7 @@ class Writer:
         ):
             return False
 
-        if (
-            not settings.output.save_files_before_compact
-            or settings.output.min_words_per_segment != 0
-        ) and not all(
+        if (not settings.output.save_files_before_compact or settings.output.min_words_per_segment != 0) and not all(
             Path(
                 settings.output.output_dir,
                 output_format,

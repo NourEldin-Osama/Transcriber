@@ -1,10 +1,10 @@
 [project]
 name = "Transcriber"
-version = "0.1.5"
+version = "0.1.8"
 description = "A simple tool to transcribe audio files"
 readme = "README.md"
 authors = [
-    { name = "NourEldin", email = "noureldin.osama.saad@gmail.com" }
+    {name = "NourEldin", email = "noureldin.osama.saad@gmail.com"}
 ]
 requires-python = ">=3.11"
 dependencies = [
@@ -14,7 +14,7 @@ dependencies = [
     "python-docx>=1.1.2",
     "rich>=13.9.4",
     "stable-ts>=2.18.3",
-    "yt-dlp==2025.1.15",
+    "yt-dlp==2025.1.15"
 ]
 
 [project.optional-dependencies]
@@ -23,18 +23,37 @@ log = ["logfire>=3.8.1", "loguru>=0.7.3"]
 [project.scripts]
 transcribe = "Transcriber.transcriber:transcribe"
 
-[build-system]
-requires = ["uv_build"]
-build-backend = "uv_build"
+[dependency-groups]
+dev = [
+    "pre-commit",
+    "pytest"
+]
+lint = [
+    "ruff"
+]
+
+[tool.uv]
+default-groups = []
 
 [tool.uv.build-backend]
 module-name = "Transcriber"
 
-[dependency-groups]
-dev = [
-  "pytest"
-]
+[tool.ruff]
+line-length = 120
 
-lint = [
-  "ruff"
+[tool.ruff.lint]
+extend-select = [
+    "B",  # flake8-bugbear
+    "E",  # pycodestyle
+    "I",  # isort
+    "DTZ",  # flake8-datetimez
+    "UP",  # pyupgrade
+    "C90",  # mccabe
+    "Q",  # flake8-quotes
+    "RUF"  # Ruff-specific rules
 ]
+extend-ignore = ["RUF001"]
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"

@@ -6,7 +6,7 @@ import faster_whisper
 import whisper
 
 from Transcriber.config import settings
-from Transcriber.logging import logfire, logger
+from Transcriber.logging import logger
 from Transcriber.types.segment_type import SegmentType
 from Transcriber.types.whisper.type_hints import WhisperModel
 
@@ -34,8 +34,8 @@ class WhisperRecognizer:
                 return self._recognize_faster_whisper(file_path, model)
 
             else:
-                logger.error(
-                    "Unsupported model type:",
+                logger.exception(
+                    "Unsupported model type",
                     model_type=type(model),
                 )
                 raise ValueError("Unsupported model type")

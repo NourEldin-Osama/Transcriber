@@ -42,9 +42,7 @@ class Downloader:
         self._initialize_youtube_dl_with_archive()
         self._initialize_youtube_dl_without_archive()
 
-    def download(
-        self, url: str, retries: int = 3, save_response: bool = False
-    ) -> dict[str, Any]:
+    def download(self, url: str, retries: int = 3, save_response: bool = False) -> dict[str, Any]:
         """Downloads and extracts information from a given URL using youtube-dl.
         This method attempts to download content from the provided URL and extract its information.
         It includes a retry mechanism for failed attempts and an option to save the response data.
@@ -100,9 +98,7 @@ class Downloader:
         Returns:
             None
         """
-        self.youtube_dl_without_archive = yt_dlp.YoutubeDL(
-            self._config(extract_flat=True)
-        )
+        self.youtube_dl_without_archive = yt_dlp.YoutubeDL(self._config(extract_flat=True))
 
     def _config(self, **kwargs: Any) -> dict[str, Any]:
         """Configure YouTube downloader options.
@@ -158,10 +154,7 @@ class Downloader:
         def file_exists(file_name: str) -> bool:
             extensions = ["mp3", "wav", "m4a", "webm", "opus"]
 
-            return any(
-                os.path.exists(os.path.join(self.output_dir, f"{file_name}.{ext}"))
-                for ext in extensions
-            )
+            return any(os.path.exists(os.path.join(self.output_dir, f"{file_name}.{ext}")) for ext in extensions)
 
         if "_type" in url_data and url_data["_type"] == "playlist":
             for entry in url_data["entries"]:

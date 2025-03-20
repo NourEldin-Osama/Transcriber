@@ -7,7 +7,9 @@ try:
 
     if settings.logging.logfire_token:
         # Initialize logfire with the token
-        logfire.configure(token=settings.logging.logfire_token)
+        logfire.configure(
+            token=settings.logging.logfire_token,
+        )
     else:
         logfire.configure()
     logfire.instrument_pydantic()
@@ -56,16 +58,12 @@ except ImportError:
 
     if settings.logging.log_to_file:
         # Add file handler for all logs
-        file_handler = logging.FileHandler(
-            LOG_DIR / "transcriber.log", encoding="utf-8"
-        )
+        file_handler = logging.FileHandler(LOG_DIR / "transcriber.log", encoding="utf-8")
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
         # Add file handler for errors only
-        error_handler = logging.FileHandler(
-            LOG_DIR / "transcriber_errors.log", encoding="utf-8"
-        )
+        error_handler = logging.FileHandler(LOG_DIR / "transcriber_errors.log", encoding="utf-8")
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(formatter)
         logger.addHandler(error_handler)

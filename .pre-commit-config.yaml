@@ -1,0 +1,40 @@
+repos:
+- repo: https://github.com/astral-sh/uv-pre-commit
+  rev: 0.6.8
+  hooks:
+  # Update the uv lockfile
+  - id: uv-lock
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-case-conflict
+  - id: check-illegal-windows-names
+  - id: check-toml
+  - id: check-yaml
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+
+- repo: https://github.com/crate-ci/typos
+  rev: v1
+  hooks:
+  # Check for typos in the codebase.
+  - id: typos
+
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.14.0
+  hooks:
+  - id: pretty-format-toml
+    args: [--autofix, --no-sort, --indent, '4']
+  - id: pretty-format-yaml
+    args: [--autofix]
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.11.0
+  hooks:
+  # Run the linter.
+  - id: ruff
+    args: [--fix, --extend-select, I]
+  # Run the formatter.
+  - id: ruff-format
