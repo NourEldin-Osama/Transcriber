@@ -150,10 +150,10 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
-    input: Input
-    output: Output
-    whisper: Whisper
-    logging: Logging
+    input: Input = Input()
+    output: Output = Output()
+    whisper: Whisper = Whisper()
+    logging: Logging = Logging()
 
 
 @lru_cache
