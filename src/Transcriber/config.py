@@ -20,19 +20,31 @@ class Input(BaseModel):
         List of URLs or file paths to process.
     skip_if_output_exist : bool, optional
         Skip processing if output files already exist, by default True.
-    download_retries : int, optional
-        Number of retry attempts for downloads, by default 3.
-    yt_dlp_options : str | None, optional
-        Additional options for yt-dlp, by default None.
     verbose : bool, optional
         Enable verbose output, by default False.
     """
 
     urls_or_paths: list[str]
     skip_if_output_exist: bool = True
+    verbose: bool = False
+
+
+class YtDlp(BaseModel):
+    """Configuration class for YouTube-DL settings.
+
+    Parameters
+    ----------
+    download_retries : int, optional
+        Number of retry attempts for downloads, by default 3.
+    yt_dlp_options : str | None, optional
+        Additional options for yt-dlp, by default None.
+    save_responses : bool, optional
+        Whether to save responses from yt-dlp downloads, by default True.
+    """
+
     download_retries: int = 3
     yt_dlp_options: str | None = None
-    verbose: bool = False
+    save_responses: bool = True
 
 
 class Output(BaseModel):
@@ -124,6 +136,7 @@ class Logging(BaseModel):
     rotation: str = "1 week"
     backtrace: bool = True
     diagnose: bool = True
+    # logfire settings
     enable_logfire: bool = False
     logfire_token: str | None = None
 
@@ -141,6 +154,8 @@ class Settings(BaseSettings):
         Whisper model configuration settings.
     logging : Logging
         Logging configuration settings.
+    yt_dlp : YtDlp
+        YouTube-DL configuration settings.
     """
 
     model_config = SettingsConfigDict(
@@ -154,6 +169,7 @@ class Settings(BaseSettings):
     output: Output = Output()
     whisper: Whisper = Whisper()
     logging: Logging = Logging()
+    yt_dlp: YtDlp = YtDlp()
 
 
 @lru_cache
