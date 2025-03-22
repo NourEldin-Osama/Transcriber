@@ -62,8 +62,6 @@ def process_local_directory(path, model):
 
                 file_path = str(file["file_path"].absolute())
 
-                logger.info(f"Transcribing file: {file_name}")
-
                 with logfire.span(f"Transcribing {file_name}"):
                     recognizer = WhisperRecognizer(progress=progress)
                     segments = recognizer.recognize(
