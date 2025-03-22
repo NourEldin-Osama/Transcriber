@@ -89,9 +89,6 @@ class WhisperRecognizer:
             **kwargs,
         )
 
-        end_time = datetime.now(UTC)
-        processing_time = (end_time - start_time).total_seconds()
-
         logger.debug(
             "Transcribing file {file_name}",
             file_name=audio_file_path,
@@ -134,6 +131,9 @@ class WhisperRecognizer:
             if progress_update > 0:
                 self.progress.update(file_task, advance=progress_update)
             last_end = segment.end
+
+        end_time = datetime.now(UTC)
+        processing_time = (end_time - start_time).total_seconds()
 
         self.progress.update(
             file_task,
