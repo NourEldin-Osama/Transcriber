@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 import humanize
@@ -33,7 +33,7 @@ class TranscriptionMetadata:
         self.duration = duration
         self.processing_time = processing_time
         self.file_size = Path(file_path).stat().st_size
-        self.date_time = datetime.now(datetime.UTC)
+        self.date_time = datetime.now(UTC)
         self.append_to_csv()
 
     def to_csv(self):

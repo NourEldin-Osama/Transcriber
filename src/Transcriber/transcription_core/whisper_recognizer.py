@@ -1,5 +1,5 @@
 import warnings
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -82,14 +82,14 @@ class WhisperRecognizer:
 
         logger.debug("Configuring faster-whisper", **kwargs, model_type=type(model))
 
-        start_time = datetime.now(datetime.UTC)
+        start_time = datetime.now(UTC)
 
         segments, info = model.transcribe(
             audio=audio_file_path,
             **kwargs,
         )
 
-        end_time = datetime.now(datetime.UTC)
+        end_time = datetime.now(UTC)
         processing_time = (end_time - start_time).total_seconds()
 
         logger.debug(
