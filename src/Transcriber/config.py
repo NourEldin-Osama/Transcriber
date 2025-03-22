@@ -61,15 +61,12 @@ class Output(BaseModel):
         Whether to save files before compacting segments, by default False.
     min_words_per_segment : int, optional
         Minimum number of words required per segment, by default 1.
-    save_yt_dlp_responses : bool, optional
-        Whether to save responses from yt-dlp downloads, by default True.
     """
 
     output_formats: list[str] = Field(default=["all"], examples=[["txt"]])
     output_dir: str = "Transcripts"
     save_files_before_compact: bool = False
     min_words_per_segment: int = 1
-    save_yt_dlp_responses: bool = True
     title_font_name: str = "Times New Roman"
     body_font_name: str = "Arial"
     title_font_size: int = 30
