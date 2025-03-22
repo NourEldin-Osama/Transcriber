@@ -6,6 +6,9 @@ from loguru import logger
 
 from Transcriber.config import settings
 from Transcriber.logging.config import LOG_DIR
+from Transcriber.logging.dummy_logfire import DummyLogfire
+
+Logfire = DummyLogfire()  # Dummy implementation of LogFire
 
 
 def configure_console_logging() -> None:
@@ -40,33 +43,16 @@ def configure_file_logging() -> None:
     )
 
 
-def get_dummy_logfire() -> object:
-    """
-    Returns a dummy logfire implementation for compatibility.
-
-    Returns:
-        object: Dummy logfire implementation
-    """
-    from Transcriber.logging.dummy_logfire import DummyLogfire
-
-    logger.warning("Logfire is not enabled. Using dummy logfire.")
-    # Return a dummy logfire implementation
-    # for compatibility with the rest of the code
-    return DummyLogfire()
-
-
-def get_logfire() -> object:
+def get_logfire() -> None:
     """
     Configure and return the LogFire module if enabled in settings.
     If LogFire is not enabled or fails to import, return a dummy implementation.
     This function is used to set up LogFire for logging.
-
-    Returns:
-        object: LogFire module if configured successfully, or a dummy implementation.
     """
+    global Logfire
     if not settings.logging.enable_logfire:
         logger.info("Logfire is not enabled in settings")
-        return get_dummy_logfire()
+        return
 
     try:
         import logfire
@@ -85,28 +71,32 @@ def get_logfire() -> object:
         logfire_sink = logfire.loguru_handler()["sink"]
         logger.add(logfire_sink, level="TRACE")
         logger.info("Logfire configured successfully.")
-        return logfire
+        Logfire = logfire
+        return
 
     except ImportError:
         logger.warning("Logfire is not installed. Please install it to use logfire logging.")
-        return get_dummy_logfire()
+        return
     except Exception as e:
         logger.error(f"Failed to configure logfire: {e}. Please check your logfire configuration.")
-        return get_dummy_logfire()
+        return
 
 
-# Initialize and configure all logging components when the module is imported
+def setup_logging() -> None:
+    """Set up logging configuration."""
+    # Remove the default console handler
+    logger.remove()
 
-# Remove the default console handler
-logger.remove()
+    # Configure console and file logging
+    configure_console_logging()
+    configure_file_logging()
 
-# Configure logging components
-configure_console_logging()
-configure_file_logging()
+    # Configure LogFire
+    get_logfire()
 
-# Configure LogFire
-logfire = get_logfire()
+    # Log initialization
+    logger.debug("Settings", settings=settings)
+    logger.info("Logging initialized")
 
-# Log initialization
-logger.debug("Settings", settings=settings)
-logger.info("Logging initialized")
+
+setup_logging()
