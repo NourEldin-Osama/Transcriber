@@ -25,7 +25,7 @@ class Input(BaseModel):
         Skip processing if output files already exist, by default True.
     """
 
-    urls_or_paths: list[str] = Field(..., examples=[["."]])
+    urls_or_paths: list[str] = Field(default=[], examples=[["."]])
     skip_if_output_exist: bool = True
 
 
@@ -63,7 +63,7 @@ class Output(BaseModel):
         Minimum number of words required per segment, by default 1.
     """
 
-    output_formats: list[str] = Field(default=["all"], examples=[["txt"]])
+    output_formats: list[str] = Field(default=["all"], examples=[["txt", "docx"]])
     output_dir: str = "Transcripts"
     save_files_before_compact: bool = False
     min_words_per_segment: int = 1
@@ -107,7 +107,7 @@ class Whisper(BaseModel):
 
     model_name_or_path: str = "large-v3"
     task: str = "transcribe"
-    language: str = Field(..., examples=["ar", "en"])
+    language: str | None = Field(None, examples=["ar", "en"])
     use_faster_whisper: bool = True
     beam_size: int = 5
     ct2_compute_type: str = "float16"
