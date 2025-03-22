@@ -1,5 +1,5 @@
 import csv
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import humanize
@@ -44,10 +44,10 @@ class TranscriptionMetadata:
             "File Name": self.file_name,
             "Status": self.status,
             "Duration": humanize.precisedelta(
-                datetime.timedelta(seconds=self.duration),
+                timedelta(seconds=self.duration),
             ),
             "Processing Time": humanize.precisedelta(
-                datetime.timedelta(seconds=self.processing_time),
+                timedelta(seconds=self.processing_time),
             ),
             "File Size": humanize.naturalsize(self.file_size),
             "Duration (seconds)": self.duration,
