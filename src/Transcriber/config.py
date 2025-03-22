@@ -134,6 +134,8 @@ class Logging(BaseModel):
     rotation: str = "1 week"
     backtrace: bool = True
     diagnose: bool = True
+    save_metadata: bool = True
+    metadata_csv_path: str = "metadata.csv"
     # logfire settings
     enable_logfire: bool = False
     logfire_token: str | None = None

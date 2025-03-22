@@ -1,4 +1,5 @@
 import warnings
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -7,6 +8,7 @@ import whisper
 
 from Transcriber.config import settings
 from Transcriber.logging import logger
+from Transcriber.transcription_core.transcription_metadata import TranscriptionMetadata
 from Transcriber.types.segment_type import SegmentType
 from Transcriber.types.whisper.type_hints import WhisperModel
 
@@ -80,10 +82,16 @@ class WhisperRecognizer:
 
         logger.debug("Configuring faster-whisper", **kwargs, model_type=type(model))
 
+        start_time = datetime.now(datetime.UTC)
+
         segments, info = model.transcribe(
             audio=audio_file_path,
             **kwargs,
         )
+
+        end_time = datetime.now(datetime.UTC)
+        processing_time = (end_time - start_time).total_seconds()
+
         logger.debug(
             "Transcribing file {file_name}",
             file_name=audio_file_path,
@@ -133,5 +141,14 @@ class WhisperRecognizer:
             description=f"[bold green]Transcribing {file_name} Complete 🎉",
             refresh=True,
         )
+
+        if settings.logging.save_metadata:
+            TranscriptionMetadata(
+                file_name=file_name,
+                file_path=audio_file_path,
+                status="success",
+                duration=file_duration,
+                processing_time=processing_time,
+            )
 
         return converted_segments
