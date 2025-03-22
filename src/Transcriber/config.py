@@ -24,7 +24,7 @@ class Input(BaseModel):
         Enable verbose output, by default False.
     """
 
-    urls_or_paths: list[str]
+    urls_or_paths: list[str] = Field(..., examples=[["."]])
     skip_if_output_exist: bool = True
     verbose: bool = False
 
@@ -65,7 +65,7 @@ class Output(BaseModel):
         Whether to save responses from yt-dlp downloads, by default True.
     """
 
-    output_formats: list[str] = Field(default=["all"])
+    output_formats: list[str] = Field(default=["all"], examples=[["txt"]])
     output_dir: str = "Transcripts"
     save_files_before_compact: bool = False
     min_words_per_segment: int = 1
@@ -110,7 +110,7 @@ class Whisper(BaseModel):
 
     model_name_or_path: str = "large-v3"
     task: str = "transcribe"
-    language: str
+    language: str = Field(..., examples=["ar", "en"])
     use_faster_whisper: bool = True
     beam_size: int = 5
     ct2_compute_type: str = "float16"
@@ -165,11 +165,11 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
-    input: Input = Input()
-    output: Output = Output()
-    whisper: Whisper = Whisper()
-    logging: Logging = Logging()
-    yt_dlp: YtDlp = YtDlp()
+    input: Input = Field(default_factory=Input)
+    output: Output = Field(default_factory=Output)
+    whisper: Whisper = Field(default_factory=Whisper)
+    logging: Logging = Field(default_factory=Logging)
+    yt_dlp: YtDlp = Field(default_factory=YtDlp)
 
 
 @lru_cache
