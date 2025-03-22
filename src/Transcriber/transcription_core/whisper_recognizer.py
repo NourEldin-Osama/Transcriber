@@ -12,8 +12,7 @@ from Transcriber.types.whisper.type_hints import WhisperModel
 
 
 class WhisperRecognizer:
-    def __init__(self, verbose: bool, progress: Any = None):
-        self.verbose = verbose
+    def __init__(self, progress: Any = None):
         self.progress = progress
 
     def recognize(
@@ -47,7 +46,7 @@ class WhisperRecognizer:
     ) -> list[SegmentType]:
         segments = model.transcribe(
             audio=audio_file_path,
-            verbose=self.verbose,
+            verbose=settings.whisper.verbose,
             task=settings.whisper.task,
             language=settings.whisper.language,
             beam_size=settings.whisper.beam_size,

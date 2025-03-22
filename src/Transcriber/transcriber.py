@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-from Transcriber.config import settings
+from Transcriber.config import LOG_LEVELS, settings, update_settings
 from Transcriber.export_handlers.exporter import Writer
 from Transcriber.logging import logfire, logger
 from Transcriber.transcription_core.whisper_recognizer import WhisperRecognizer
@@ -65,7 +65,7 @@ def process_local_directory(path, model):
                 logger.info(f"Transcribing file: {file_name}")
 
                 with logfire.span(f"Transcribing {file_name}"):
-                    recognizer = WhisperRecognizer(verbose=settings.input.verbose, progress=progress)
+                    recognizer = WhisperRecognizer(progress=progress)
                     segments = recognizer.recognize(
                         file_path,
                         model,
@@ -87,8 +87,25 @@ def process_local_directory(path, model):
         )
 
 
-def transcribe():
+def transcribe(
+    urls_or_paths: list[str] | None = None,
+    output_dir: str | None = None,
+    output_formats: list[str] | None = None,
+    language: str | None = None,
+    log_level: LOG_LEVELS | None = None,
+    enable_logfire: bool | None = None,
+    logfire_token: str | None = None,
+):
     """Main transcription function that processes all input sources."""
+    update_settings(
+        urls_or_paths=urls_or_paths,
+        output_dir=output_dir,
+        output_formats=output_formats,
+        language=language,
+        log_level=log_level,
+        enable_logfire=enable_logfire,
+        logfire_token=logfire_token,
+    )
     input_files = settings.input.urls_or_paths
     if not input_files:
         logger.warning("No input files provided. Exiting transcription.")

@@ -10,6 +10,9 @@ from Transcriber.types.export_type import ExportType
 # Get the project root directory
 PROJECT_ROOT = Path.cwd()
 
+# Define the log levels
+LOG_LEVELS = Literal["TRACE", "DEBUG", "INFO", "SUCCESS", "WARNING", "ERROR", "CRITICAL"]
+
 
 class Input(BaseModel):
     """Configuration class for input settings.
@@ -20,13 +23,10 @@ class Input(BaseModel):
         List of URLs or file paths to process.
     skip_if_output_exist : bool, optional
         Skip processing if output files already exist, by default True.
-    verbose : bool, optional
-        Enable verbose output, by default False.
     """
 
     urls_or_paths: list[str] = Field(..., examples=[["."]])
     skip_if_output_exist: bool = True
-    verbose: bool = False
 
 
 class YtDlp(BaseModel):
@@ -115,6 +115,7 @@ class Whisper(BaseModel):
     batch_size: int = 16
     vad_filter: bool = True
     vad_parameters: dict = dict(min_silence_duration_ms=500)
+    verbose: bool = False
 
     @model_validator(mode="after")
     def set_language(self) -> "Whisper":
@@ -128,7 +129,7 @@ class Logging(BaseModel):
 
     log_to_console: bool = True
     log_to_file: bool = True
-    log_level: Literal["TRACE", "DEBUG", "INFO", "SUCCESS", "WARNING", "ERROR", "CRITICAL"] = "INFO"
+    log_level: LOG_LEVELS = "INFO"
     log_path: str = "logs"
     rotation: str = "1 week"
     backtrace: bool = True
@@ -175,3 +176,29 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
+
+
+def update_settings(
+    urls_or_paths: list[str] | None = None,
+    output_dir: str | None = None,
+    output_formats: list[str] | None = None,
+    language: str | None = None,
+    log_level: LOG_LEVELS | None = None,
+    enable_logfire: bool | None = None,
+    logfire_token: str | None = None,
+):
+    """Update the settings with new values."""
+    if urls_or_paths:
+        settings.input.urls_or_paths = urls_or_paths
+    if output_dir:
+        settings.output.output_dir = output_dir
+    if output_formats:
+        settings.output.output_formats = output_formats
+    if language:
+        settings.whisper.language = language
+    if log_level:
+        settings.logging.log_level = log_level
+    if enable_logfire is not None:
+        settings.logging.enable_logfire = enable_logfire
+    if logfire_token:
+        settings.logging.logfire_token = logfire_token
