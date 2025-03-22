@@ -1,6 +1,6 @@
 [project]
 name = "Transcriber"
-version = "0.1.16"
+version = "0.1.17"
 description = "A simple tool to transcribe audio files"
 readme = "README.md"
 authors = [

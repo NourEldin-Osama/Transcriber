@@ -33,12 +33,15 @@ class TranscriptionMetadata:
         self.duration = duration
         self.processing_time = processing_time
         self.file_size = Path(file_path).stat().st_size
+        self.file_path = file_path
         self.date_time = datetime.now(UTC)
         self.append_to_csv()
 
-    def to_csv(self):
+    def export_metadata(self):
         """
-        Append the metadata to a CSV file.
+        Export metadata to a dictionary format.
+        Returns:
+            dict: Metadata dictionary
         """
         self.metadata = {
             "File Name": self.file_name,
@@ -53,14 +56,16 @@ class TranscriptionMetadata:
             "Duration (seconds)": self.duration,
             "Processing Time (seconds)": self.processing_time,
             "File Size (bytes)": self.file_size,
+            "File Path": self.file_path,
             "Date Time": self.date_time,
         }
 
     def append_to_csv(self):
         """
         Append the metadata to a CSV file.
+        Creates the file if it doesn't exist.
         """
-        self.to_csv()
+        self.export_metadata()
         with open(settings.logging.metadata_csv_path, "a") as file:
             writer = csv.DictWriter(file, fieldnames=self.metadata.keys())
             if file.tell() == 0:
