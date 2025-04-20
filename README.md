@@ -19,7 +19,7 @@ A flexible Python package for transcribing audio and video from various sources 
 
 ## Installation
 
-1. Install the package:
+- Install the package from PyPI:
 
     ```bash
     uv pip install Transcriber
@@ -27,13 +27,13 @@ A flexible Python package for transcribing audio and video from various sources 
 
 ## Configuration
 
-1. Copy the example environment file:
+- Copy the example environment file:
 
     ```bash
     cp .env.example .env
     ```
 
-2. Configure the settings in `.env`:
+- Configure the settings in `.env`:
 
     ```env
     # Input settings
@@ -46,6 +46,11 @@ A flexible Python package for transcribing audio and video from various sources 
 
     # Whisper model settings
     WHISPER__LANGUAGE="ar"
+
+    # Logging settings
+    LOGGING__LOG_LEVEL="DEBUG"
+    LOGGING__ENABLE_LOGFIRE=true
+    LOGGING__LOGFIRE_TOKEN="<your_logfire_token>"
     ```
 
 ## Usage
@@ -55,8 +60,16 @@ A flexible Python package for transcribing audio and video from various sources 
 ```python
 from Transcriber.transcriber import transcribe
 
-# Configure input files in .env, then:
-transcribe()
+# Configure the transcriber via .env or parameters, then:
+transcribe(
+    urls_or_paths=["path/to/audio.mp3", "https://youtube.com/watch?v=example"],
+    output_dir="Transcripts",
+    output_formats=["txt", "srt"],
+    language="ar",
+    log_level="INFO",
+    enable_logfire=True,  # Optional
+    logfire_token="<your_logfire_token>"  # Optional, you can get it from https://logfire.pydantic.dev/login
+)
 ```
 
 ### Command Line Usage
