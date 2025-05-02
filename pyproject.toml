@@ -1,6 +1,6 @@
 [project]
 name = "Transcriber"
-version = "0.1.18"
+version = "0.1.19"
 description = "A simple tool to transcribe audio files"
 readme = "README.md"
 authors = [
@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "faster-whisper>=1.1.1",
+    "hf-xet>=1.1.0",
     "humanize>=4.12.1",
     "loguru>=0.7.3",
     "openai-whisper>=20240930",

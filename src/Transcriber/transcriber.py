@@ -272,6 +272,7 @@ def transcribe(
         logfire_token=logfire_token,
         download_dir=download_dir,
     )
+    settings.output.process_formats()
     input_files = settings.input.urls_or_paths
     if not input_files:
         logger.warning("No input files provided. Exiting transcription.")
