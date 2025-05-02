@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/astral-sh/uv-pre-commit
-  rev: 0.6.9
+  rev: 0.7.2
   hooks:
   # Update the uv lockfile
   - id: uv-lock
@@ -22,7 +22,7 @@ repos:
   - id: validate-pyproject
 
 - repo: https://github.com/crate-ci/typos
-  rev: v1.30.2
+  rev: v1.31.2
   hooks:
   # Check for typos in the codebase.
   - id: typos
@@ -36,7 +36,7 @@ repos:
     args: [--autofix]
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.11.2
+  rev: v0.11.8
   hooks:
   # Run the linter.
   - id: ruff

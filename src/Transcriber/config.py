@@ -40,11 +40,14 @@ class YtDlp(BaseModel):
         Additional options for yt-dlp, by default None.
     save_responses : bool, optional
         Whether to save responses from yt-dlp downloads, by default True.
+    download_dir : str | None, optional
+        Directory path where downloaded files will be saved. If None, will use output_dir.
     """
 
     download_retries: int = 3
     yt_dlp_options: str | None = None
     save_responses: bool = True
+    download_dir: Path = Path.joinpath(PROJECT_ROOT, "Downloads")
 
 
 class Output(BaseModel):
@@ -188,6 +191,7 @@ def update_settings(
     log_level: LOG_LEVELS | None = None,
     enable_logfire: bool | None = None,
     logfire_token: str | None = None,
+    download_dir: str | None = None,
 ):
     """Update the settings with new values."""
     if urls_or_paths:
@@ -204,3 +208,5 @@ def update_settings(
         settings.logging.enable_logfire = enable_logfire
     if logfire_token:
         settings.logging.logfire_token = logfire_token
+    if download_dir:
+        settings.yt_dlp.download_dir = Path(download_dir)
